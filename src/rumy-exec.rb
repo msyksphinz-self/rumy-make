@@ -11,10 +11,11 @@ define_method("execute") {|command|
 class Target
   def initialize(name)
     @name = name
+    @depend_targets = []
   end
 
   def depends(targets)
-    @depends = targets
+    @depend_targets = targets
   end
 
   def executes(commands)
@@ -26,7 +27,7 @@ class Target
   end
 
   attr_reader :commands
-
+  attr_reader :depend_targets
 end
 
 
@@ -40,9 +41,14 @@ end
 def exec_target (name)
   if @target_list.key?(name) then
     target = @target_list[name]
+    # Execute dependent commands at first
+    target.depend_targets.each{|dep|
+      puts "[DEBUG] : Depends Target \"#{dep}\" execute."
+      exec_target(dep)
+    }
     result = `#{target.commands}`
     puts result
   else
-    puts "Error: target #{name} not found."
+    puts "Error: target \"#{name}\" not found."
   end
 end

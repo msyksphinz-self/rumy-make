@@ -8,7 +8,6 @@ execute "echo Hello World"
 
 
 make_target :first do
-  depends [:second, :third]
   executes "echo Hello, First Target"
 end
 
@@ -20,4 +19,9 @@ make_target :compile_c do
   executes "gcc #{src} -o #{exe}"
 end
 
-exec_target :compile_c
+make_target :run_c do
+  depends [:compile_c]
+  executes "../tests/simple_main"
+end
+
+exec_target :run_c
