@@ -2,12 +2,11 @@
 
 define_method("execute") {|command|
   result = `#{command}`
-  puts "Result\n"
-  puts "===================="
   puts result
-  puts "====================\n\n"
 }
 
+
+@target_list = Hash.new
 
 class Target
   def initialize(name)
@@ -23,8 +22,10 @@ class Target
   end
 
   def show
-    puts "Target Name = #{@name}, Depends = #{@depends}, Commands = #{@commands}"
+    puts "[DEBUG] : Target Created  = #{@name}, Depends = #{@depends}, Commands = #{@commands}"
   end
+
+  attr_reader :commands
 
 end
 
@@ -33,4 +34,15 @@ def make_target (name, &block)
   target = Target.new(name)
   target.instance_eval(&block)
   target.show
+  @target_list[name] = target
+end
+
+def exec_target (name)
+  if @target_list.key?(name) then
+    target = @target_list[name]
+    result = `#{target.commands}`
+    puts result
+  else
+    puts "Error: target #{name} not found."
+  end
 end
