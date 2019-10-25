@@ -1,4 +1,4 @@
-#/usr/bin/ruby
+#!/usr/bin/ruby
 
 define_method("execute") {|command|
   result = `#{command}`
@@ -12,6 +12,7 @@ class Target
   def initialize(name)
     @name = name
     @depend_targets = []
+    @help_message = ""
   end
 
   def depends(targets)
@@ -22,12 +23,18 @@ class Target
     @commands = commands
   end
 
+  def explain(message)
+    @help_message = message
+  end
+
   def show
     puts "[DEBUG] : Target Created  = #{@name}, Depends = #{@depends}, Commands = #{@commands}"
   end
 
+  attr_reader :name
   attr_reader :commands
   attr_reader :depend_targets
+  attr_reader :help_message
 end
 
 
@@ -51,4 +58,15 @@ def exec_target (name)
   else
     puts "Error: target \"#{name}\" not found."
   end
+end
+
+
+def show_help
+  puts "[HELP] ============================================="
+  @target_list.each{|key, target|
+    if target.help_message != "" then
+      puts "[HELP] #{key} : " + target.help_message
+    end
+  }
+  puts "[HELP] ============================================="
 end

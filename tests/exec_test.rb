@@ -4,7 +4,11 @@ require 'test/unit'
 
 load "rumy-exec.rb"
 
-execute "echo Hello World"
+class TestExecute < Test::Unit::TestCase
+  def test_execute
+    assert_equal NIL, execute("echo Hello World")
+  end
+end
 
 
 make_target :first do
