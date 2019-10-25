@@ -65,26 +65,46 @@ private def do_target (name)
     target = @target_list[name]
 
     # Execute dependent commands at first
+    check_target = false
+    if name.kind_of?(String) and File.exist?(name) then
+      target_stat = File::Stat.new(name)
+      puts "[DEBUG] : target mtime: #{target_stat.mtime}"
+
+      check_target = true
+    end
+
+    target_older_1of_depends = false
     target.depend_targets.each{|dep|
-
-      # if depends target is not found,
-      # if depends targte is symbol but not found
       if not @target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
-        puts "[DEBUG] : Depend Tareget \"#{dep}\" is because it's file."
-        next
-      end
+        puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
+        if check_target == true and dep.kind_of?(String) then
+          dep_stat = File::Stat.new(dep)
+          puts "[DEBUG] : depends mtime: #{dep_stat.mtime}"
 
+          if target_stat.mtime < dep_stat.mtime then
+            target_older_1of_depends = true
+          end
+        else
+          # If dependence list includes symbol, need to execute
+          target_older_1of_depends = true
+        end
+        next
+      else
+        # one of depends are symbol => forcely re-execute target
+        target_older_1of_depends = true
+      end
       puts "[DEBUG] : Depends Target \"#{dep}\" execute."
       do_target(dep)
     }
 
-    # Execute commands!
-    result = ""
-    target.commands.each {|command|
-      puts "#{command}"
-      result = `#{command}`
-      puts result
-    }
+    if target_older_1of_depends then
+      # Execute commands!
+      target.commands.each {|command|
+        puts "#{command}"
+        result = `#{command}`
+        puts result
+      }
+    end
   else
     puts "Error: target \"#{name}\" not found."
   end
