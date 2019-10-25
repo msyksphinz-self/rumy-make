@@ -13,6 +13,7 @@ class Target
     @name = name
     @depend_targets = []
     @help_message = ""
+    @commands = []
   end
 
   def depends(targets)
@@ -24,7 +25,11 @@ class Target
   end
 
   def executes(commands)
-    @commands = commands
+    if not commands.kind_of?(Array) then
+      puts "ERROR: \"executes args\" should be specified as List. Did you forget to add '[', ']'?"
+      exit
+    end
+    @commands += commands
   end
 
   def explain(message)
@@ -65,8 +70,13 @@ def exec_target (name)
       puts "[DEBUG] : Depends Target \"#{dep}\" execute."
       exec_target(dep)
     }
-    result = `#{target.commands}`
-    puts result
+
+    # Execute commands!
+    result = ""
+    target.commands.each {|command|
+      result = `#{command}`
+      puts result
+    }
   else
     puts "Error: target \"#{name}\" not found."
   end
