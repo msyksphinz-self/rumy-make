@@ -24,6 +24,7 @@ make_target :compile do
 end
 
 make_target :run do
+  global
   depends [:compile]
   executes [exec_file]
 end

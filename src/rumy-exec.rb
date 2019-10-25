@@ -14,6 +14,7 @@ class Target
     @depend_targets = []
     @help_message = ""
     @commands = []
+    @global = false
   end
 
   def depends(targets)
@@ -40,10 +41,15 @@ class Target
     puts "[DEBUG] : Target Created  = #{@name}, Depends = #{@depends}, Commands = #{@commands}"
   end
 
+  def global
+    @is_global = true
+  end
+
   attr_reader :name
   attr_reader :commands
   attr_reader :depend_targets
   attr_reader :help_message
+  attr_reader :is_global
 end
 
 
@@ -54,9 +60,10 @@ def make_target (name, &block)
   @target_list[name] = target
 end
 
-def exec_target (name)
+private def do_target (name)
   if @target_list.key?(name) then
     target = @target_list[name]
+
     # Execute dependent commands at first
     target.depend_targets.each{|dep|
 
@@ -68,7 +75,7 @@ def exec_target (name)
       end
 
       puts "[DEBUG] : Depends Target \"#{dep}\" execute."
-      exec_target(dep)
+      do_target(dep)
     }
 
     # Execute commands!
@@ -83,10 +90,26 @@ def exec_target (name)
 end
 
 
+def exec_target (name)
+  if not @target_list.key?(name) then
+    puts "Error: target \"#{name}\" not found."
+    exit
+  end
+
+  target = @target_list[name]
+  if target.is_global != true then
+    puts "Error: target \"#{name}\" is not global. You can't specify the target directly"
+    exit
+  end
+
+  do_target(name)
+end
+
+
 def show_help
   puts "[HELP] ============================================="
   @target_list.each{|key, target|
-    if target.help_message != "" then
+    if target.help_message != "" and target.is_global == true then
       puts "[HELP] #{key} : " + target.help_message
     end
   }

@@ -15,6 +15,7 @@ make_target :compile_c do
 end
 
 make_target :run_c do
+  global
   depends [:compile_c]
   executes ["#{exec_file}"]
 end
