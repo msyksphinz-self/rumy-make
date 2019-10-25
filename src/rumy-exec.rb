@@ -16,6 +16,10 @@ class Target
   end
 
   def depends(targets)
+    if not targets.kind_of?(Array) then
+      puts "ERROR: \"depends\" should be specified as List. Did you forget to add '[', ']'?"
+      exit
+    end
     @depend_targets = targets
   end
 
@@ -50,6 +54,14 @@ def exec_target (name)
     target = @target_list[name]
     # Execute dependent commands at first
     target.depend_targets.each{|dep|
+
+      # if depends target is not found,
+      # if depends targte is symbol but not found
+      if not @target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
+        puts "[DEBUG] : Depend Tareget \"#{dep}\" is because it's file."
+        next
+      end
+
       puts "[DEBUG] : Depends Target \"#{dep}\" execute."
       exec_target(dep)
     }
