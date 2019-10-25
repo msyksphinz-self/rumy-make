@@ -81,6 +81,7 @@ private def do_target (name)
     # Execute commands!
     result = ""
     target.commands.each {|command|
+      puts "#{command}"
       result = `#{command}`
       puts result
     }

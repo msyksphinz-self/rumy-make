@@ -2,16 +2,7 @@
 
 load "rumy-exec.rb"
 
-test_o_files = ["../tests/multiple_files_build/test_0.o",
-                "../tests/multiple_files_build/test_1.o",
-                "../tests/multiple_files_build/test_2.o",
-                "../tests/multiple_files_build/test_3.o",
-                "../tests/multiple_files_build/test_4.o",
-                "../tests/multiple_files_build/test_5.o",
-                "../tests/multiple_files_build/test_6.o",
-                "../tests/multiple_files_build/test_7.o",
-                "../tests/multiple_files_build/test_8.o",
-                "../tests/multiple_files_build/test_9.o"];
+test_o_files = (0..99).map{|num| "../tests/multiple_files_build/test_#{num}.o"}
 
 test_o_files.each {|test_o|
   test_c = test_o.sub(".o", ".c")
