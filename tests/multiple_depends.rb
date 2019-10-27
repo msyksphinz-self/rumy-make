@@ -21,3 +21,4 @@ make_target :run_c do
 end
 
 exec_target :run_c
+clean_target :run_c

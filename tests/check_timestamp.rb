@@ -8,4 +8,9 @@ make_target "test" do
   executes ["gcc test.c -o test"]
 end
 
-exec_target "test"
+
+if ARGV.length == 0 then
+  exec_target "test"
+else
+  instance_eval("exec_target ARGV[0]")
+end
