@@ -13,15 +13,15 @@ class TestExecute < Test::Unit::TestCase
     $stdout = StringIO.new
 
 expected_message = "\
-[DEBUG] : Target Created  = make_ccode, Depends = , Commands = [\"echo \"#include <stdio.h>\\\nint main () { printf(\\\"Hello Rumy-Make!!\\\"); return 0; }\" > ./test.c\"]
+[DEBUG] : Target Created  = make_ccode, Depends = , Commands = [\"echo \\\"#include <stdio.h>\\nint main () { printf(\\\\\\\"Hello Rumy-Make!!\\\\\\\"); return 0; }\\\" > ./test.c\"]
 [DEBUG] : Target Created  = compile_c, Depends = , Commands = [\"gcc ./test.c -o ./test\"]
 [DEBUG] : Target Created  = link_code, Depends = , Commands = []
 [DEBUG] : Target Created  = run_c, Depends = , Commands = [\"./test\"]
-`-> Target : run_c                              // [\"./test\"]
-    |-> Target : link_code                              // []
+`-> Target : run_c\t\t\t\t// [\"./test\"]
+    |-> Target : link_code\t\t\t\t// []
     |   `-> Target : hogehoge
-    `-> Target : compile_c                              // [\"gcc ./test.c -o ./test\"]
-        |-> Target : make_ccode                         // [\"echo \"#include <stdio.h>\nint main () { printf(\\\"Hello Rumy-Make!!\\\"); return 0; }\" > ./test.c\"]
+    `-> Target : compile_c\t\t\t\t// [\"gcc ./test.c -o ./test\"]
+        |-> Target : make_ccode\t\t\t\t// [\"echo \\\"#include <stdio.h>\\nint main () { printf(\\\\\\\"Hello Rumy-Make!!\\\\\\\"); return 0; }\\\" > ./test.c\"]
         |-> Target : test2.c
         `-> Target : test3.c
 "
