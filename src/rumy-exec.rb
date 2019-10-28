@@ -6,7 +6,7 @@ define_method("execute") {|command|
 }
 
 
-@target_list = Hash.new
+$target_list = Hash.new
 
 class Target
   def initialize(name)
@@ -57,12 +57,12 @@ def make_target (name, &block)
   target = Target.new(name)
   target.instance_eval(&block)
   target.show
-  @target_list[name] = target
+  $target_list[name] = target
 end
 
 private def do_target (name)
-  if @target_list.key?(name) then
-    target = @target_list[name]
+  if $target_list.key?(name) then
+    target = $target_list[name]
 
     # Execute dependent commands at first
     check_target = false
@@ -74,28 +74,32 @@ private def do_target (name)
     end
 
     target_older_1of_depends = false
-    target.depend_targets.each{|dep|
-      if not @target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
-        puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
-        if check_target == true and dep.kind_of?(String) then
-          dep_stat = File::Stat.new(dep)
-          puts "[DEBUG] : depends mtime: #{dep_stat.mtime}"
+    if target.depend_targets.length == 0 then
+      target_older_1of_depends = true
+    else
+      target.depend_targets.each{|dep|
+        if not $target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
+          puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
+          if check_target == true and dep.kind_of?(String) then
+            dep_stat = File::Stat.new(dep)
+            puts "[DEBUG] : depends mtime: #{dep_stat.mtime}"
 
-          if target_stat.mtime < dep_stat.mtime then
+            if target_stat.mtime < dep_stat.mtime then
+              target_older_1of_depends = true
+            end
+          else
+            # If dependence list includes symbol, need to execute
             target_older_1of_depends = true
           end
+          next
         else
-          # If dependence list includes symbol, need to execute
+          # one of depends are symbol => forcely re-execute target
           target_older_1of_depends = true
         end
-        next
-      else
-        # one of depends are symbol => forcely re-execute target
-        target_older_1of_depends = true
-      end
-      puts "[DEBUG] : Depends Target \"#{dep}\" execute."
-      do_target(dep)
-    }
+        puts "[DEBUG] : Depends Target \"#{dep}\" execute."
+        do_target(dep)
+      }
+    end
 
     if target_older_1of_depends then
       # Execute commands!
@@ -112,12 +116,12 @@ end
 
 
 def exec_target (name)
-  if not @target_list.key?(name) then
+  if not $target_list.key?(name) then
     puts "Error: target \"#{name}\" not found."
     exit
   end
 
-  target = @target_list[name]
+  target = $target_list[name]
   if target.is_global != true then
     puts "Error: target \"#{name}\" is not global. You can't specify the target directly"
     exit
@@ -128,11 +132,11 @@ end
 
 
 private def do_clean_target(name)
-  if not @target_list.key?(name) then
+  if not $target_list.key?(name) then
     return
   end
 
-  target = @target_list[name]
+  target = $target_list[name]
   target.depend_targets.each{|dep|
     do_clean_target(dep)
   }
@@ -144,7 +148,7 @@ private def do_clean_target(name)
 end
 
 def clean_target (name)
-  if not @target_list.key?(name) then
+  if not $target_list.key?(name) then
     puts "Error: target \"#{name}\" not found."
     return
   end
@@ -154,7 +158,7 @@ end
 
 def show_help
   puts "[HELP] ============================================="
-  @target_list.each{|key, target|
+  $target_list.each{|key, target|
     if target.help_message != "" and target.is_global == true then
       puts "[HELP] #{key} : " + target.help_message
     end
