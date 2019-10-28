@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-load "rumy-exec.rb"
+load "rumy-main.rb"
 
 make_target "test" do
   global

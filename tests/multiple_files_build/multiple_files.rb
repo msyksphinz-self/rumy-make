@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-load "rumy-exec.rb"
+load "rumy-main.rb"
 
 test_o_files = (0..99).map{|num| "../tests/multiple_files_build/test_#{num}.o"}
 

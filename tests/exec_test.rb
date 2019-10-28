@@ -6,7 +6,7 @@ require 'stringio'
 
 class TestExecute < Test::Unit::TestCase
   def test_execute
-    load "rumy-exec.rb"
+    load "rumy-main.rb"
 
     # replace stdout with string object
     $stdout = StringIO.new
@@ -18,7 +18,7 @@ class TestExecute < Test::Unit::TestCase
   end
 
   def test_make_target
-    load "rumy-exec.rb"
+    load "rumy-main.rb"
 
     expected_message = "\
 [DEBUG] : Target Created  = first, Depends = , Commands = [\"echo Hello, First Target\"]
@@ -42,7 +42,7 @@ Hello, First Target
   end
 
   def test_make_copmile
-    load "rumy-exec.rb"
+    load "rumy-main.rb"
 
     expected_message = "\
 [DEBUG] : Target Created  = compile_c, Depends = , Commands = [\"gcc ../tests/simple_main.cpp -o ../tests/simple_main\"]

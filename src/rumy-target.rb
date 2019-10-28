@@ -1,58 +1,5 @@
 #!/usr/bin/ruby
 
-define_method("execute") {|command|
-  result = `#{command}`
-  puts result
-}
-
-
-$target_list = Hash.new
-
-class Target
-  def initialize(name)
-    @name = name
-    @depend_targets = []
-    @help_message = ""
-    @commands = []
-    @global = false
-  end
-
-  def depends(targets)
-    if not targets.kind_of?(Array) then
-      puts "ERROR: \"depends\" should be specified as List. Did you forget to add '[', ']'?"
-      exit
-    end
-    @depend_targets = targets
-  end
-
-  def executes(commands)
-    if not commands.kind_of?(Array) then
-      puts "ERROR: \"executes args\" should be specified as List. Did you forget to add '[', ']'?"
-      exit
-    end
-    @commands += commands
-  end
-
-  def explain(message)
-    @help_message = message
-  end
-
-  def show
-    puts "[DEBUG] : Target Created  = #{@name}, Depends = #{@depends}, Commands = #{@commands}"
-  end
-
-  def global
-    @is_global = true
-  end
-
-  attr_reader :name
-  attr_reader :commands
-  attr_reader :depend_targets
-  attr_reader :help_message
-  attr_reader :is_global
-end
-
-
 def make_target (name, &block)
   target = Target.new(name)
   target.instance_eval(&block)
@@ -128,40 +75,4 @@ def exec_target (name)
   end
 
   do_target(name)
-end
-
-
-private def do_clean_target(name)
-  if not $target_list.key?(name) then
-    return
-  end
-
-  target = $target_list[name]
-  target.depend_targets.each{|dep|
-    do_clean_target(dep)
-  }
-
-  if not Symbol.all_symbols.include?(name) and File.exist?(name) then
-    puts "[DEBUG] clean_target : remove " + name
-    File.delete(name)
-  end
-end
-
-def clean_target (name)
-  if not $target_list.key?(name) then
-    puts "Error: target \"#{name}\" not found."
-    return
-  end
-  do_clean_target(name)
-
-end
-
-def show_help
-  puts "[HELP] ============================================="
-  $target_list.each{|key, target|
-    if target.help_message != "" and target.is_global == true then
-      puts "[HELP] #{key} : " + target.help_message
-    end
-  }
-  puts "[HELP] ============================================="
 end

@@ -6,7 +6,7 @@ require 'stringio'
 class TestExecute < Test::Unit::TestCase
   def test_execute
 
-    load "rumy-exec.rb"
+    load "rumy-main.rb"
 
     if File.exist?("test") then
       File.delete("test")

@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-load "rumy-exec.rb"
+load "rumy-main.rb"
 
 test1_c = "../tests/test1.c"
 

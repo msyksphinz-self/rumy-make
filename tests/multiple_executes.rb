@@ -1,4 +1,4 @@
-load "rumy-exec.rb"
+load "rumy-main.rb"
 
 make_target :multiple_targets do
   global

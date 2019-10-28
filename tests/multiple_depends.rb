@@ -15,7 +15,7 @@ class TestExecute < Test::Unit::TestCase
 [DEBUG] : Target Created  = make_ccode, Depends = , Commands = [\"echo \\\"#include <stdio.h>\\nint main () { printf(\\\\\\\"Hello Rumy-Make!!\\\\\\\"); return 0; }\\\" > ./test.c\"]
 "
 
-    load "rumy-exec.rb"
+    load "rumy-main.rb"
 
     source_file = "./test.c"
     exec_file = source_file.sub(".c", "")

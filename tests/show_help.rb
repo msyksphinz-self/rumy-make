@@ -5,7 +5,7 @@ require 'stringio'
 
 class TestExecute < Test::Unit::TestCase
   def test_show_help
-    load "rumy-exec.rb"
+    load "rumy-main.rb"
 
     expected_message = "\
 [DEBUG] : Target Created  = make_ccode, Depends = , Commands = []
