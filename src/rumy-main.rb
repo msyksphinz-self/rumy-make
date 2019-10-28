@@ -2,6 +2,7 @@
 
 require "rumy-clean.rb"
 require "rumy-target.rb"
+require "rumy-draw.rb"
 
 define_method("execute") {|command|
   result = `#{command}`
