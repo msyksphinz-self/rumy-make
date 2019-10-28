@@ -68,7 +68,7 @@ private def do_target (name)
     check_target = false
     if name.kind_of?(String) and File.exist?(name) then
       target_stat = File::Stat.new(name)
-      puts "[DEBUG] : target mtime: #{target_stat.mtime}"
+      # puts "[DEBUG] : target mtime: #{target_stat.mtime}"
 
       check_target = true
     end
@@ -82,9 +82,9 @@ private def do_target (name)
           puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
           if check_target == true and dep.kind_of?(String) then
             dep_stat = File::Stat.new(dep)
-            puts "[DEBUG] : depends mtime: #{dep_stat.mtime}"
+            # puts "[DEBUG] : depends mtime: #{dep_stat.mtime}"
 
-            if target_stat.mtime < dep_stat.mtime then
+            if target_stat.mtime <= dep_stat.mtime then
               target_older_1of_depends = true
             end
           else
