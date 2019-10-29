@@ -3,6 +3,7 @@
 require "rumy-clean.rb"
 require "rumy-target.rb"
 require "rumy-draw.rb"
+require "rumy-help.rb"
 
 define_method("execute") {|command|
   result = `#{command}`
@@ -54,15 +55,4 @@ class Target
   attr_reader :depend_targets
   attr_reader :help_message
   attr_reader :is_global
-end
-
-
-def show_help
-  puts "[HELP] ============================================="
-  $target_list.each{|key, target|
-    if target.help_message != "" and target.is_global == true then
-      puts "[HELP] #{key} : " + target.help_message
-    end
-  }
-  puts "[HELP] ============================================="
 end
