@@ -3,7 +3,11 @@
 require "rumy-main.rb"
 
 
-def make_library(lib_name, cpp_file_list, compile_options, link_options)
+def make_library(lib_name, cpp_file_list, compile_options, link_options, additional_depends = [])
+
+  additional_depends.each {|dep|
+    do_target dep
+  }
 
   obj_file_list = cpp_file_list.map {|cpp| cpp + ".o"}
   make_target lib_name do
@@ -23,7 +27,11 @@ def make_library(lib_name, cpp_file_list, compile_options, link_options)
 end
 
 
-def make_execute(exec_name, cpp_file_list, lib_file_list, compile_options, link_options, link_libs)
+def make_execute(exec_name, cpp_file_list, lib_file_list, compile_options, link_options, link_libs, additional_depends = [])
+
+  additional_depends.each {|dep|
+    do_target dep
+  }
 
   obj_file_list = cpp_file_list.map {|cpp| cpp + ".o"}
   make_target exec_name do
