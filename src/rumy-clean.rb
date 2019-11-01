@@ -15,7 +15,12 @@ private def do_clean_target(name)
     do_clean_target(dep)
   }
 
-  if not Symbol.all_symbols.include?(name) and File.exist?(name) then
+  if $target_list.key?(name) and $target_list[name].is_external then
+    # External Target
+    puts "[DEBUG] : Call External rule" + name
+    load $target_list[name].external_dir
+    clean_target name
+  elsif not Symbol.all_symbols.include?(name) and File.exist?(name) then
     puts "[DEBUG] clean_target : remove " + name
     File.delete(name)
   end

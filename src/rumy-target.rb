@@ -25,7 +25,14 @@ private def do_target (name)
       target_older_1of_depends = true
     else
       target.depend_targets.each{|dep|
-        if not $target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
+        if $target_list.key?(dep) and $target_list[dep].is_external then
+          # External Target
+          puts "[DEBUG] : Call External rule : " + dep
+          Dir.chdir($target_list[dep].external_dir) {
+            puts `pwd`
+            `ruby ./build.rb`
+          }
+        elsif not $target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
           puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
           if check_target == true and dep.kind_of?(String) then
             dep_stat = File::Stat.new(dep)
@@ -75,4 +82,14 @@ def exec_target (name)
   end
 
   do_target(name)
+end
+
+
+##
+## External Target Call
+##
+def external_target(lib_name, dir)
+  target = Target.new(lib_name)
+  target.external(dir)
+  $target_list[lib_name] = target
 end

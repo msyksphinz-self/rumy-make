@@ -19,7 +19,9 @@ class Target
     @depend_targets = []
     @help_message = ""
     @commands = []
-    @global = false
+    @is_global = false
+    @is_external = false
+    @external_dir = ""
   end
 
   def depends(targets)
@@ -50,9 +52,18 @@ class Target
     @is_global = true
   end
 
+  def external(dir_name)
+    @is_external = true
+    @external_dir = dir_name
+  end
+
   attr_reader :name
   attr_reader :commands
   attr_reader :depend_targets
   attr_reader :help_message
   attr_reader :is_global
+
+  # For external
+  attr_reader :is_external
+  attr_reader :external_dir
 end
