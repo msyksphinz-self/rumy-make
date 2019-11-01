@@ -26,7 +26,7 @@ private def do_target (name)
     if target.depend_targets.length == 0 then
       target_older_depends_list = [true]
     else
-      target_older_depends_list =  Parallel.each(target.depend_targets){|dep|
+      target_older_depends_list =  Parallel.map(target.depend_targets){|dep|
         target_older_depends = false
       # target.depend_targets.each{|dep|
         skip_do_target = false
@@ -56,13 +56,14 @@ private def do_target (name)
         end
 
         if not skip_do_target then
-          puts "[DEBUG] : Depends Target \"#{dep}\" execute."
           do_target(dep)
         end
+        # puts "[DEBUG] : Depends Target \"#{dep}\" : " + target_older_depends.to_s
         target_older_depends
       }
     end
 
+    puts "[DEBUG] : Depends Target \"#{name}\" depends result = " + target_older_depends_list.to_s
     if target_older_depends_list.include?(true) then
       # Execute commands!
       target.commands.each {|command|
