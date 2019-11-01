@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+require 'parallel'
+
 def make_target (name, &block)
   target = Target.new(name)
   target.instance_eval(&block)
@@ -20,11 +22,14 @@ private def do_target (name)
       check_target = true
     end
 
-    target_older_1of_depends = false
+    target_older_depends_list = Array.new
     if target.depend_targets.length == 0 then
-      target_older_1of_depends = true
+      target_older_depends_list = [true]
     else
-      target.depend_targets.each{|dep|
+      target_older_depends_list =  Parallel.each(target.depend_targets){|dep|
+        target_older_depends = false
+      # target.depend_targets.each{|dep|
+        skip_do_target = false
         if $target_list.key?(dep) and $target_list[dep].is_external then
           # External Target
           puts "[DEBUG] : Call External rule : " + dep
@@ -36,29 +41,32 @@ private def do_target (name)
           puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
           if check_target == true and dep.kind_of?(String) then
             dep_stat = File::Stat.new(dep)
-            # puts "[DEBUG] : depends mtime: #{dep_stat.mtime}"
 
             if target_stat.mtime <= dep_stat.mtime then
-              target_older_1of_depends = true
+              target_older_depends = true
             end
           else
             # If dependence list includes symbol, need to execute
-            target_older_1of_depends = true
+            target_older_depends = true
           end
-          next
+          skip_do_target = true
         else
           # one of depends are symbol => forcely re-execute target
-          target_older_1of_depends = true
+          target_older_depends = true
         end
-        puts "[DEBUG] : Depends Target \"#{dep}\" execute."
-        do_target(dep)
+
+        if not skip_do_target then
+          puts "[DEBUG] : Depends Target \"#{dep}\" execute."
+          do_target(dep)
+        end
+        target_older_depends
       }
     end
 
-    if target_older_1of_depends then
+    if target_older_depends_list.include?(true) then
       # Execute commands!
       target.commands.each {|command|
-        puts "#{command}"
+        # puts "#{command}"
         result = `#{command}`
         puts result
       }
