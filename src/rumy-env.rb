@@ -5,7 +5,7 @@ def clear_env
 end
 
 def add_env_path(env_data)
-  if ENV["PATH"] == NIL then
+  if ENV["PATH"] == nil then
     ENV["PATH"] = env_data
   else
     ENV["PATH"] += ":" + env_data
@@ -13,7 +13,7 @@ def add_env_path(env_data)
 end
 
 def add_env_ldpath(env_data)
-  if ENV["LD_LIBRARY_PATH"] == NIL then
+  if ENV["LD_LIBRARY_PATH"] == nil then
     ENV["LD_LIBRARY_PATH"] = env_data
   else
     ENV["LD_LIBRARY_PATH"] += ":" + env_data
