@@ -38,6 +38,8 @@ def obtain_rule (rule_array)
             make_library_rule(key, value)
           elsif value[0]["type"][0] == "bin" then
             make_execute_rule(key, value)
+          elsif value[0]["type"][0] == "custom" then
+            make_custom_rule(key, value)
           else
             puts "I don't know this type! \"" + value[0]["type"][0].to_s + "\""
             exit
@@ -74,8 +76,6 @@ end
 
 
 def make_execute_rule(exe_name, option_hash)
-  # assert(rule_hash.kind_of?(Hash))
-
   exe_option_hash = Hash.new
   exe_option_hash['src_lists'      ] = []
   exe_option_hash['lib_lists'      ] = []
@@ -96,6 +96,22 @@ def make_execute_rule(exe_name, option_hash)
                exe_option_hash['link_options'   ],
                exe_option_hash['link_libs'      ],
                exe_option_hash['depends'        ])
+end
+
+def make_custom_rule(rule_name, option_hash)
+  rule_option_hash = Hash.new
+  rule_option_hash['executes'] = []
+  rule_option_hash['depends' ] = []
+
+  option_hash.each {|elem|
+    elem.each{|key, value|
+      rule_option_hash[key] = value
+    }
+  }
+  make_target rule_name do
+    depends rule_option_hash['depends']
+    executes rule_option_hash['executes']
+  end
 end
 
 obtain_rule data
