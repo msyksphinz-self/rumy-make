@@ -17,9 +17,10 @@ private def do_clean_target(name)
 
   if $target_list.key?(name) and $target_list[name].is_external then
     # External Target
-    puts "[DEBUG] : Call External rule" + name
+    puts "[DEBUG] : Call External Clean Rule" + name
     Dir.chdir($target_list[name].external_dir) {
-      `ruby ./build.rb clean`
+      clean_result = `ruby ./build.rb clean`
+      puts clean_result
     }
   elsif not Symbol.all_symbols.include?(name) and File.exist?(name) then
     puts "[DEBUG] clean_target : remove " + name
