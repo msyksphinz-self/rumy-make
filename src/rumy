@@ -1,0 +1,34 @@
+#!/usr/bin/ruby
+
+require 'thor'
+require 'rumy-main.rb'
+
+class RumyCLI < Thor
+  default_command :build
+
+  desc "rumy build", "Execute Build"
+  method_option "file", type: :string
+  def build()
+    rumyfile = 'build.rb'
+    if options.key?("file") then
+      rumyfile = options["file"]
+    end
+    load rumyfile
+    exec_target :all
+  end
+
+  desc "rumy clean", "Execute Clean"
+  def clean()
+    load 'build.rb'
+    clean_target :all
+  end
+
+  desc "rumy deps_draw", "Draw dependence Graph"
+  def deps_draw()
+    load 'build.rb'
+    draw_target :all
+  end
+
+end
+
+RumyCLI.start(ARGV)
