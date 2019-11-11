@@ -17,6 +17,12 @@ class RumyCLI < Thor
     exec_target :all
   end
 
+  desc "rumy test", "Execute Tests"
+  def test()
+    load 'tests.rb'
+    run_tests
+  end
+
   desc "rumy clean", "Execute Clean"
   def clean()
     load 'build.rb'
