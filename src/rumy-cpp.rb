@@ -66,3 +66,40 @@ def make_execute(exec_name, cpp_file_list, lib_file_list, compile_options, link_
     end
   }
 end
+
+
+def cpp_init_project(proj_name)
+  Dir.mkdir(proj_name)
+  Dir.mkdir(proj_name + "/src")
+  Dir.mkdir(proj_name + "/include")
+  fp = File.open(proj_name + "/src/main.cpp", "w") {|f|
+    f.puts("#include <iostream>")
+    f.puts("int main ()")
+    f.puts("{")
+    f.puts("  std::cout << \"Hello World\\n\";")
+    f.puts("}")
+  }
+
+  fp = File.open(proj_name + "/.gitignore", "w") {|f|
+    f.puts("*\.o   # object file")
+    f.puts("#{proj_name}  # executable")
+  }
+
+  fp = File.open(proj_name + "/build.rb", "w") {|f|
+    f.puts("#!/usr/bin/env ruby\n")
+
+    f.puts("load \"rumy-cpp.rb\"")
+
+    f.puts("cpp_lists = [\"./src/main.cpp\"]")
+
+    f.puts("compile_options = [\"-I./include\"]")
+
+    f.puts("make_execute(\"" + proj_name + "\", cpp_lists, [], compile_options, [], [], [])")
+
+    f.puts("make_target :all do")
+    f.puts("  global")
+    f.puts("  depends [\"" + proj_name + "\"]")
+    f.puts("end")
+  }
+
+end

@@ -4,6 +4,8 @@ require "rumy-clean.rb"
 require "rumy-target.rb"
 require "rumy-draw.rb"
 require "rumy-help.rb"
+require "rumy-cpp.rb"
+require "rumy-rust.rb"
 
 define_method("execute") {|command|
   result = `#{command}`

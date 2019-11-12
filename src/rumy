@@ -35,6 +35,18 @@ class RumyCLI < Thor
     draw_target :all
   end
 
+  # Project Initializer for C++ Project
+  desc "rumy cpp_init proj_name", "Generate C++ Project Template"
+  def cpp_init(proj_name)
+    cpp_init_project (proj_name)
+  end
+
+  # Project Initializer for Rust Project
+  desc "rumy rust_init proj_name", "Generate Rust Project Template"
+  def rust_init(proj_name)
+    rust_init_project (proj_name)
+  end
+
 end
 
 RumyCLI.start(ARGV)
