@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 
 require 'parallel'
+require 'rumy-git.rb'
 
 def make_target (name, &block)
   target = Target.new(name)
@@ -12,6 +13,8 @@ end
 private def do_target (name)
   if $target_list.key?(name) then
     target = $target_list[name]
+
+    need_check_modify = rumy_is_git_modify_lock()
 
     # Execute dependent commands at first
     check_target = false
@@ -39,6 +42,11 @@ private def do_target (name)
           }
         elsif not $target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
           puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
+          if need_check_modify and git_file_modified?(dep) then
+            puts "[ERROR] : Rumy build is stop due to File #{dep} is modified. Exit."
+            exit
+          end
+
           if check_target == true and dep.kind_of?(String) then
             dep_stat = File::Stat.new(dep)
 
