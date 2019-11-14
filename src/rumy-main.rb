@@ -6,6 +6,7 @@ require "rumy-draw.rb"
 require "rumy-help.rb"
 require "rumy-cpp.rb"
 require "rumy-rust.rb"
+require "rumy-git.rb"
 
 define_method("execute") {|command|
   result = `#{command}`

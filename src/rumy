@@ -47,6 +47,21 @@ class RumyCLI < Thor
     rust_init_project (proj_name)
   end
 
+  # Project Initializer for Rust Project
+  desc "rumy clone-git repo_location", "Clone Git Repository"
+  def clone_git(repo_location)
+    rumy_clone_git(repo_location, repo_location.split('/').last.sub('.git', ''))
+  end
+
+  def clone_git(repo_location, dir)
+    rumy_clone_git(repo_location, dir)
+  end
+
+  desc "rumy log-git repo_location", "Clone Git Repository"
+  def log_git(file)
+    rumy_log_git(file)
+  end
+
 end
 
 RumyCLI.start(ARGV)
