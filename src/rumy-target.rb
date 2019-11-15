@@ -41,7 +41,7 @@ private def do_target (name)
             `ruby ./build.rb`
           }
         elsif not $target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
-          puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
+          # puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
           if need_check_modify and git_file_modified?(dep) then
             puts "[ERROR] : Rumy build is stop due to File #{dep} is modified. Exit."
             exit
@@ -71,7 +71,6 @@ private def do_target (name)
       }
     end
 
-    puts "[DEBUG] : Depends Target \"#{name}\" depends result = " + target_older_depends_list.to_s
     if target_older_depends_list.include?(true) then
       # Execute commands!
       target.commands.each {|command|
