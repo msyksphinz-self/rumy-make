@@ -35,6 +35,11 @@ class Target
     @depend_targets = targets
   end
 
+  # Return one line strings of depend_targets
+  def source
+    return @depend_targets.join(' ').to_s
+  end
+
   def executes(commands)
     if not commands.kind_of?(Array) then
       puts "ERROR: \"executes args\" should be specified as List. Did you forget to add '[', ']'?"
