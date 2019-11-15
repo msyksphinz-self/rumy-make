@@ -6,7 +6,7 @@ require 'rumy-main.rb'
 class RumyCLI < Thor
   default_command :build
 
-  desc "rumy build", "Execute Build"
+  desc "build", "Execute Build"
   method_option "file", type: :string
   def build()
     rumyfile = 'build.rb'
@@ -17,32 +17,32 @@ class RumyCLI < Thor
     exec_target :all
   end
 
-  desc "rumy test", "Execute Tests"
+  desc "test", "Execute Tests"
   def test()
     load 'tests.rb'
     run_tests
   end
 
-  desc "rumy clean", "Execute Clean"
+  desc "clean", "Execute Clean"
   def clean()
     load 'build.rb'
     clean_target :all
   end
 
-  desc "rumy deps_draw", "Draw dependence Graph"
+  desc "deps_draw", "Draw dependence Graph"
   def deps_draw()
     load 'build.rb'
     draw_target :all
   end
 
   # Project Initializer for C++ Project
-  desc "rumy cpp_init proj_name", "Generate C++ Project Template"
+  desc "cpp_init proj_name", "Generate C++ Project Template"
   def cpp_init(proj_name)
     cpp_init_project (proj_name)
   end
 
   # Project Initializer for Rust Project
-  desc "rumy rust_init proj_name", "Generate Rust Project Template"
+  desc "rust_init proj_name", "Generate Rust Project Template"
   def rust_init(proj_name)
     rust_init_project (proj_name)
   end
@@ -59,7 +59,7 @@ class RumyCLI < Thor
     rumy_clone_git(repo_location, dir)
   end
 
-  desc "rumy log-git repo_location", "Clone Git Repository"
+  desc "log-git repo_location", "Clone Git Repository"
   def log_git(file)
     rumy_log_git(file)
   end
