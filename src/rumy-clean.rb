@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 define_method("execute") {|command|
   result = `#{command}`

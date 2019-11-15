@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 require "rumy-clean.rb"
 require "rumy-target.rb"

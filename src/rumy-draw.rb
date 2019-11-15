@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 private def do_draw_target (name, spc, show_line_list, last_item)
   (1..spc).each_with_index {|_, i|

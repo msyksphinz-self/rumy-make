@@ -1,4 +1,5 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
+
 # coding: utf-8
 
 $test_list = Hash.new
