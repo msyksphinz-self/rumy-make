@@ -104,8 +104,20 @@ end
 ##
 ## External Target Call
 ##
-def external_target(lib_name, dir)
+def external_target(lib_name, dir, depends = [])
   target = Target.new(lib_name)
   target.external(dir)
+  target.depends(depends)
+  $target_list[lib_name] = target
+end
+
+
+##
+## External Target Make call
+##
+def external_make(lib_name, dir, depends = [])
+  target = Target.new(lib_name)
+  target.executes(["make -C #{dir}"])
+  target.depends(depends)
   $target_list[lib_name] = target
 end
