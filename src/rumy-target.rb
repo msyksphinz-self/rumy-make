@@ -2,6 +2,7 @@
 
 require 'parallel'
 require 'rumy-git.rb'
+require 'open3'
 
 def make_target (name, &block)
   target = Target.new(name)
@@ -43,8 +44,11 @@ private def do_target (name)
         # External Target
         puts "[DEBUG] : Call External rule : " + dep
         Dir.chdir($target_list[dep].external_dir) {
-          puts `pwd`
-          `ruby ./build.rb`
+          Open3.popen2e("rumy") do |stdin, stdout_err, stderr, wait_thr|
+            while line = stdout_err.gets
+              puts line
+            end
+          end
         }
       elsif not $target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
         # puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
