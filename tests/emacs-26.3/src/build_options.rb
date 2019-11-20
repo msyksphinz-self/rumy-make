@@ -114,7 +114,7 @@ LIBSYSTEMD_CFLAGS = ""
 ## w32notify.o if HAVE_W32NOTIFY.
 NOTIFY_CFLAGS = ""
 
-LIBGNUTLS_CFLAGS = ""
+LIBGNUTLS_CFLAGS = "-I/usr/include/p11-kit-1"
 
 # MYCPPFLAGS is for by-hand Emacs-specific overrides, e.g.,
 # "make MYCPPFLAGS='-DDBUS_DEBUG'".
