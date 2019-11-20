@@ -11,77 +11,85 @@ def make_target (name, &block)
 end
 
 private def do_target (name)
-  if $target_list.key?(name) then
-    target = $target_list[name]
+  puts "[DEBUG] : ==== Execute Target " + name.to_s + " ===="
 
-    need_check_modify = rumy_is_git_modify_lock()
+  if not $target_list.key?(name) then
+    puts "Error: target \"#{name}\" not found."
+    return
+  end
 
-    # Execute dependent commands at first
-    check_target = false
-    if name.kind_of?(String) and File.exist?(name) then
-      target_stat = File::Stat.new(name)
-      # puts "[DEBUG] : target mtime: #{target_stat.mtime}"
+  target = $target_list[name]
 
-      check_target = true
-    end
+  need_check_modify = rumy_is_git_modify_lock()
 
-    target_older_depends_list = Array.new
-    if target.depend_targets.length == 0 then
-      target_older_depends_list = [true]
-    else
-      target_older_depends_list =  Parallel.map(target.depend_targets){|dep|
-        target_older_depends = false
-      # target.depend_targets.each{|dep|
-        skip_do_target = false
-        if $target_list.key?(dep) and $target_list[dep].is_external then
-          # External Target
-          puts "[DEBUG] : Call External rule : " + dep
-          Dir.chdir($target_list[dep].external_dir) {
-            puts `pwd`
-            `ruby ./build.rb`
-          }
-        elsif not $target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
-          # puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
-          if need_check_modify and git_file_modified?(dep) then
-            puts "[ERROR] : Rumy build is stop due to File #{dep} is modified. Exit."
-            exit
-          end
+  # Execute dependent commands at first
+  check_target = false
+  if name.kind_of?(String) and File.exist?(name) then
+    target_stat = File::Stat.new(name)
+    # puts "[DEBUG] : target mtime: #{target_stat.mtime}"
 
-          if check_target == true and dep.kind_of?(String) then
-            dep_stat = File::Stat.new(dep)
+    check_target = true
+  end
 
-            if target_stat.mtime <= dep_stat.mtime then
-              target_older_depends = true
-            end
-          else
-            # If dependence list includes symbol, need to execute
+  target_older_depends_list = Array.new
+  if target.depend_targets.length == 0 then
+    target_older_depends_list = [true]
+  else
+    target_older_depends_list =  Parallel.map(target.depend_targets){|dep|
+      target_older_depends = false
+      # target_older_depends_list = target.depend_targets.each{|dep|
+      skip_do_target = false
+      if $target_list.key?(dep) and $target_list[dep].is_external then
+        # External Target
+        puts "[DEBUG] : Call External rule : " + dep
+        Dir.chdir($target_list[dep].external_dir) {
+          puts `pwd`
+          `ruby ./build.rb`
+        }
+      elsif not $target_list.key?(dep) and not Symbol.all_symbols.include?(dep) then
+        puts "[DEBUG] : Depend Tareget \"#{dep}\" is skip because it's file."
+        if need_check_modify and git_file_modified?(dep) then
+          puts "[ERROR] : Rumy build is stop due to File #{dep} is modified. Exit."
+          exit
+        end
+
+        if check_target == true and dep.kind_of?(String) then
+          puts "Checking file Status " + dep + " ..."
+          dep_stat = File::Stat.new(dep)
+
+          if target_stat.mtime <= dep_stat.mtime then
             target_older_depends = true
           end
-          skip_do_target = true
         else
-          # one of depends are symbol => forcely re-execute target
+          # If dependence list includes symbol, need to execute
           target_older_depends = true
         end
+        skip_do_target = true
+      else
+        # one of depends are symbol => forcely re-execute target
+        target_older_depends = true
+      end
 
-        if not skip_do_target then
-          do_target(dep)
-        end
-        # puts "[DEBUG] : Depends Target \"#{dep}\" : " + target_older_depends.to_s
-        target_older_depends
-      }
-    end
-
-    if target_older_depends_list.include?(true) then
-      # Execute commands!
-      target.commands.each {|command|
-        # puts "#{command}"
-        result = `#{command}`
-        puts result
-      }
-    end
-  else
-    puts "Error: target \"#{name}\" not found."
+      if not skip_do_target then
+        do_target(dep)
+      end
+      # puts "[DEBUG] : Depends Target \"#{dep}\" : " + target_older_depends.to_s
+      target_older_depends
+    }
   end
+
+  puts target_older_depends_list.to_s
+  if target_older_depends_list.include?(true) then
+    # Execute commands!
+    target.commands.each {|command|
+      puts "#{command}"
+      result = `#{command}`
+      puts result
+    }
+  else
+    puts "Target Execution Skipped"
+  end
+
 end
 
 

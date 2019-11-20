@@ -32,7 +32,7 @@ class Target
       puts "ERROR: \"depends\" should be specified as List. Did you forget to add '[', ']'?"
       exit
     end
-    @depend_targets = targets
+    @depend_targets = targets.flatten
   end
 
   # Return one line strings of depend_targets
@@ -53,7 +53,7 @@ class Target
   end
 
   def show
-    puts "[DEBUG] : Target Created  = #{@name}, Depends = #{@depends}, Commands = #{@commands}"
+    puts "[DEBUG] : Target Created  = #{@name}, Depends = #{@depend_targets}, Commands = #{@commands}"
   end
 
   def global
