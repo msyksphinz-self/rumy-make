@@ -197,6 +197,7 @@ make_target "temacs" + EXEEXT do
 end
 
 external_make charsets, "../admin/charsets"
+external_make LIBXMENU, oldXMenudir
 
 make_target charscript do
   target_name = File.basename(name)
@@ -212,13 +213,17 @@ SOME_MACHINE_OBJECTS = ["dosfns.o", "msdos.o",
                         "w16select.o", "widget.o", "xfont.o", "ftfont.o", "xftfont.o", "ftxfont.o", "gtkutil.o",
                         "xsettings.o", "xgselect.o", "termcap.o"]
 
+make_target "#{libsrc}/make-docfile${EXEEXT}" do
+  executes ["make -C #{libsrc} make-docfile#{EXEEXT}"]
+end
+
 make_target :etc_doc do
   depends ["lisp.mk", "#{libsrc}/make-docfile${EXEEXT}", obj, lisp]
-  executes ["$(MKDIR_P) #{etc}"]
+  executes ["mkdir -p #{etc}"]
   executes ["rm -f #{etc}/DOC"]
   executes ["#{libsrc}/make-docfile -d #{srcdir} \
              #{SOME_MACHINE_OBJECTS.join(' ').to_s} #{obj.join(' ').to_s} > #{etc}/DOC"]
-  executes ["#{libsrc}/make-docfile -a #{etc}/DOC -d #{lispsource} #{shortlisp}"]
+  executes ["#{libsrc}/make-docfile -a #{etc}/DOC -d #{lispsource} #{shortlisp.join(' ').to_s}"]
 end
 
 make_target "emacs" + EXEEXT do
@@ -520,6 +525,13 @@ make_cpp_target "intervals.o", ["intervals.c", "buffer.h", INTERVALS_H, "keyboar
 
 make_cpp_target "textprop.o", ["textprop.c", "buffer.h", "window.h", INTERVALS_H,
                                "lisp.h", "globals.h", config_h]
+
+make_cpp_target "lcms.o", ["lcms.c", INTERVALS_H, config_h]
+make_cpp_target "profiler.o", ["profiler.c", INTERVALS_H, config_h]
+make_cpp_target "decompress.o", ["decompress.c", INTERVALS_H, config_h]
+make_cpp_target "thread.o", ["thread.c", INTERVALS_H, config_h]
+make_cpp_target "systhread.o", ["systhread.c", INTERVALS_H, config_h]
+make_cpp_target "sheap.o",  ["sheap.c", INTERVALS_H, config_h]
 
 make_target :all do
   global
