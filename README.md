@@ -20,16 +20,21 @@ Rumy-Make is a toy build-tool.
 
 ## Install
 
+```sh
+git clone https://githum.com/msyksphinz-self/rumy-make.git
+cd rumy-make
+export PATH=${PWD}/src:${PATH}
+export RUBYLIB=${PWD}/src:${RUBYLIB}
+```
+
 ## Usage
 
-```sh
-export PATH=${which directory you download rumy-make}/src:${PATH}
-export RUBYLIB=${which directory you download rumy-make}/src:${RUBYLIB}
-```
+See [Instructons of Rumy-Make format]
 
 ## Contribution
 
 ## Author
 
 [msyksphinz](https://github.com/msyksphinz-self)
+
 Email : msyksphinz.dev@gmail.com
