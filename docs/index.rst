@@ -1,27 +1,51 @@
-Welcome to RISCV-BOOM's documentation!
+.. Welcome to RISCV-BOOM's documentation!
+
+RISC-V BOOMのドキュメントにようこそ！
 ======================================
 
-The Berkeley Out-of-Order Machine (BOOM) is a synthesizable and parameterizable open-source `RISC-V <riscv.org>`__ out-of-order core written in the `Chisel <chisel-lang.org>`__ hardware construction language.
-The goal of this document is to describe the design and implementation of the core as well as provide other helpful information to use the core.
+.. The Berkeley Out-of-Order Machine (BOOM) is a synthesizable and parameterizable open-source `RISC-V <riscv.org>`__ out-of-order core written in the `Chisel <chisel-lang.org>`__ hardware construction language.
+.. The goal of this document is to describe the design and implementation of the core as well as provide other helpful information to use the core.
 
-Useful Links
-------------
+Berkeley Out-of-Order Machine (BOOM) は、合成可能でパラメータ化可能なオープンソースの `RISC-V <riscv.org>`__ アウトオブオーダ・コアで、`Chisel <chisel-lang.org>`__ ハードウェア構築言語で記述されています。
+このドキュメントの目的は、このコアの設計と実装を説明し、このコアを使用するためのその他の有用な情報を提供することです。
 
-The BOOM source code can be found here: https://github.com/riscv-boom/riscv-boom.
+.. Useful Links
 
-The main supported mechanism to use the core is to use the Chipyard framework: https://github.com/ucb-bar/chipyard.
+有用なリンク集
+--------------
 
-The BOOM website can be found here: https://boom-core.org.
+.. The BOOM source code can be found here: https://github.com/riscv-boom/riscv-boom.
+.. 
+.. The main supported mechanism to use the core is to use the Chipyard framework: https://github.com/ucb-bar/chipyard.
+.. 
+.. The BOOM website can be found here: https://boom-core.org.
+.. 
+.. The BOOM mailing list can be found here: https://groups.google.com/forum/#!forum/riscv-boom.
 
-The BOOM mailing list can be found here: https://groups.google.com/forum/#!forum/riscv-boom.
+BOOMのソースコードはこちらからご覧いただけます： https://github.com/riscv-boom/riscv-boom.
 
-Quick-start
------------
+コアを使用するためにサポートされている主なメカニズムは、Chipyard フレームワークを使用することです: https://github.com/ucb-bar/chipyard.
 
-The best way to get started with the BOOM core is to use the `Chipyard project template <https://github.com/ucb-bar/chipyard>`__.
-There you will find the main steps to setup your environment, build, and run the BOOM core on a C++ emulator.
-Chipyard also provides supported flows for pushing a BOOM-based SoC through both the FireSim FPGA simulation flow and the HAMMER ASIC flow.
-Here is a selected set of steps from `Chipyard's documentation <https://chipyard.readthedocs.io/en/latest/>`__:
+BOOM の Web サイトは https://boom-core.org にあります．
+
+BOOM のメーリングリストは https://groups.google.com/forum/#!forum/riscv-boom です．
+
+
+.. Quick-start
+
+クイックスタート
+----------------
+
+.. The best way to get started with the BOOM core is to use the `Chipyard project template <https://github.com/ucb-bar/chipyard>`__.
+.. There you will find the main steps to setup your environment, build, and run the BOOM core on a C++ emulator.
+.. Chipyard also provides supported flows for pushing a BOOM-based SoC through both the FireSim FPGA simulation flow and the HAMMER ASIC flow.
+.. Here is a selected set of steps from `Chipyard's documentation <https://chipyard.readthedocs.io/en/latest/>`__:
+
+BOOM コアを使い始めるには、`Chipyard プロジェクトテンプレート <https://github.com/ucb-bar/chipyard>`__ を使うのが一番です。
+そこには、環境を整え、ビルドし、C++エミュレータ上でBOOMコアを実行するための主な手順が記載されています。
+Chipyardは、BOOMベースのSoCをFireSim FPGAシミュレーション・フローとHAMMER ASICフローの両方でプッシュするためのサポート・フローも提供しています。
+ここでは、`Chipyardのドキュメント <https://chipyard.readthedocs.io/en/latest/>`__ から手順を抜粋してご紹介します。
+
 
 .. _quick-start-code:
 .. code-block:: bash
@@ -44,7 +68,9 @@ Here is a selected set of steps from `Chipyard's documentation <https://chipyard
 
 .. Note:: :numref:`quick-start-code` assumes you don't have riscv-tools toolchain installed. It will pull and build the toolchain for you.
 
-Table of Contents
+.. Table of Contents
+
+目次
 -----------------
 
 .. toctree::
